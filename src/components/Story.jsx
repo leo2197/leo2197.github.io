@@ -46,15 +46,15 @@ const FloatingImage = () => {
   };
 
   return (
-    <div id="story" className="min-h-dvh w-screen bg-black text-blue-50">
+    <div id="workflow" className="min-h-dvh w-screen bg-black text-blue-50">
       <div className="flex size-full flex-col items-center py-10 pb-24">
         <p className="font-general text-sm uppercase md:text-[10px]">
-          the multiversal ip world
+          How I work
         </p>
 
         <div className="relative size-full">
           <AnimatedTitle
-            title="the st<b>o</b>ry of <br /> a hidden real<b>m</b>"
+            title="fr<b>o</b>m idea <br /> t<b>o</b> shipped work"
             containerClass="mt-5 pointer-events-none mix-blend-difference relative z-10"
           />
 
@@ -68,13 +68,12 @@ const FloatingImage = () => {
                   onMouseUp={handleMouseLeave}
                   onMouseEnter={handleMouseLeave}
                   src="/img/entrance.webp"
-                  alt="entrance.webp"
+                  alt="Visual scene for Leo's project workflow"
                   className="object-contain"
                 />
               </div>
             </div>
 
-            {/* for the rounded corner */}
             <svg
               className="invisible absolute size-0"
               xmlns="http://www.w3.org/2000/svg"
@@ -106,14 +105,14 @@ const FloatingImage = () => {
         <div className="-mt-80 flex w-full justify-center md:-mt-64 md:me-44 md:justify-end">
           <div className="flex h-full w-fit flex-col items-center md:items-start">
             <p className="mt-3 max-w-sm text-center font-circular-web text-violet-50 md:text-start">
-              Where realms converge, lies Zentry and the boundless pillar.
-              Discover its secrets and shape your fate amidst infinite
-              opportunities.
+              我更喜欢先做一个能运行的最小版本，再用本地预览、构建检查和
+              GitHub Pages 发布来验证结果。下一步会把项目截图、学习记录和真实作品逐步补全。
             </p>
 
             <Button
               id="realm-btn"
-              title="discover prologue"
+              title="contact Leo"
+              href="#contact"
               containerClass="mt-5"
             />
           </div>
