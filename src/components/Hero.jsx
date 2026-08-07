@@ -9,29 +9,57 @@ import VideoPreview from "./VideoPreview";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const heroVideos = [
+  {
+    name: "寄居蟹漫步",
+    src: "videos/hero-hermit-crab.mp4",
+  },
+  {
+    name: "海湾浪涌",
+    src: "videos/hero-sea-waves-bay.mp4",
+  },
+  {
+    name: "新素材",
+    src: "videos/hero-new-material.mp4",
+  },
+  {
+    name: "橙色海岸",
+    src: "videos/hero-orange-beach-sunset.mp4",
+  },
+  {
+    name: "沙滩航拍",
+    src: "videos/hero-sunny-beach-flight.mp4",
+  },
+];
+
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [hasClicked, setHasClicked] = useState(false);
-
   const [loading, setLoading] = useState(true);
   const [loadedVideos, setLoadedVideos] = useState(0);
 
-  const totalVideos = 4;
+  const totalVideos = heroVideos.length;
   const nextVdRef = useRef(null);
+
+  const getHero = (index) => heroVideos[(index - 1 + totalVideos) % totalVideos];
+  const getVideoSrc = (index) => getHero(index).src;
+  const nextIndex = (currentIndex % totalVideos) + 1;
+  const currentHero = getHero(currentIndex);
+  const nextHero = getHero(nextIndex);
 
   const handleVideoLoad = () => {
     setLoadedVideos((prev) => prev + 1);
   };
 
   useEffect(() => {
-    if (loadedVideos === totalVideos - 1) {
+    if (loadedVideos >= 1) {
       setLoading(false);
     }
   }, [loadedVideos]);
 
   const handleMiniVdClick = () => {
     setHasClicked(true);
-    setCurrentIndex((prevIndex) => (prevIndex % totalVideos) + 1);
+    setCurrentIndex(nextIndex);
   };
 
   useGSAP(
@@ -79,8 +107,6 @@ const Hero = () => {
     });
   });
 
-  const getVideoSrc = (index) => `videos/hero-${index}.mp4`;
-
   return (
     <div className="relative h-dvh w-screen overflow-x-hidden">
       {loading && (
@@ -98,21 +124,36 @@ const Hero = () => {
         className="relative z-10 h-dvh w-screen overflow-hidden rounded-lg bg-blue-75"
       >
         <div>
-          <div className="mask-clip-path absolute-center absolute z-50 size-64 cursor-pointer overflow-hidden rounded-lg">
+          <div
+            className="mask-clip-path absolute-center absolute z-50 size-64 cursor-pointer overflow-hidden rounded-lg"
+            aria-label="Switch hero video"
+          >
             <VideoPreview>
               <div
                 onClick={handleMiniVdClick}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    handleMiniVdClick();
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-label={`Switch to ${nextHero.name}`}
                 className="origin-center scale-50 opacity-0 transition-all duration-500 ease-in hover:scale-100 hover:opacity-100"
               >
                 <video
-                  ref={nextVdRef}
-                  src={getVideoSrc((currentIndex % totalVideos) + 1)}
+                  src={getVideoSrc(nextIndex)}
                   loop
                   muted
+                  playsInline
                   id="current-video"
                   className="size-64 origin-center scale-150 object-cover object-center"
                   onLoadedData={handleVideoLoad}
                 />
+                <div className="absolute bottom-3 left-1/2 z-10 -translate-x-1/2 rounded-full bg-black/55 px-3 py-1 text-center font-robert-regular text-[10px] uppercase tracking-[0.18em] text-white backdrop-blur-md">
+                  Next · {nextHero.name}
+                </div>
               </div>
             </VideoPreview>
           </div>
@@ -122,17 +163,17 @@ const Hero = () => {
             src={getVideoSrc(currentIndex)}
             loop
             muted
+            playsInline
             id="next-video"
             className="absolute-center invisible absolute z-20 size-64 object-cover object-center"
             onLoadedData={handleVideoLoad}
           />
           <video
-            src={getVideoSrc(
-              currentIndex === totalVideos - 1 ? 1 : currentIndex
-            )}
+            src={getVideoSrc(currentIndex)}
             autoPlay
             loop
             muted
+            playsInline
             className="absolute left-0 top-0 size-full object-cover object-center"
             onLoadedData={handleVideoLoad}
           />
@@ -144,6 +185,10 @@ const Hero = () => {
 
         <div className="absolute left-0 top-0 z-40 size-full">
           <div className="mt-24 px-5 sm:px-10">
+            <div className="mb-4 inline-flex rounded-full border border-white/20 bg-black/35 px-4 py-2 font-robert-regular text-xs uppercase tracking-[0.22em] text-blue-50 backdrop-blur-md">
+              Hero · {currentHero.name}
+            </div>
+
             <h1 className="special-font hero-heading text-blue-100">
               bui<b>l</b>d
             </h1>
